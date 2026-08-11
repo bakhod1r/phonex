@@ -540,8 +540,9 @@ API is still v0 and may change.
 
 ## Licence
 
-phonex is released under the Apache License 2.0; see [LICENSE](LICENSE).
+phonex is released under the MIT licence; see [LICENSE](LICENSE).
 
 The phone number metadata, and the geocoding, carrier and time zone data, are
-taken verbatim from Google's libphonenumber and carry the same licence. See
-[NOTICE](NOTICE) for what is vendored and where it came from.
+taken verbatim from Google's libphonenumber and remain under the Apache
+License 2.0. Redistributing phonex therefore means keeping [NOTICE](NOTICE),
+which records what is vendored and where it came from.

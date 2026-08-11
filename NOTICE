@@ -1,6 +1,8 @@
 phonex
 Copyright 2026 The phonex Authors
 
+The phonex source code is licensed under the MIT licence; see LICENSE.
+
 This product includes software developed at Google Inc.
 
 The phone number metadata under internal/metadata/, and the tables generated
