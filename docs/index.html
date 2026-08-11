@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>phonex — phone numbers for Go</title>
 <meta name="description" content="Phone number parsing, validation and formatting for Go, generated from Google's libphonenumber. Zero dependencies, zero-allocation parsing.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📞</text></svg>">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="phonex — phone numbers for Go">
+<meta property="og:description" content="Phone number parsing, validation and formatting for Go, generated from Google's libphonenumber. Zero dependencies, zero-allocation parsing.">
+<meta property="og:image" content="https://bakhod1r.github.io/phonex/logo.png">
+<meta property="og:url" content="https://bakhod1r.github.io/phonex/">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root {
   --bg: #ffffff;
@@ -102,7 +108,25 @@ header.hero {
   background: var(--bg-soft);
   padding: 56px 0 44px;
 }
-header.hero h1 { font-size: 44px; margin: 0 0 6px; letter-spacing: -0.02em; }
+header.hero .inner { display: flex; align-items: center; gap: 40px; }
+header.hero .text { min-width: 0; }
+header.hero .logo {
+  flex: 0 0 auto; width: 168px; height: 168px;
+  display: grid; place-items: center; border-radius: 24px;
+  /* The mark has black fill, so it needs a light tile of its own to stay
+     legible when the page is in dark mode. */
+  background: radial-gradient(circle at 30% 25%, #ffffff, #eef1f5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 10px 28px -12px rgba(109, 0, 255, 0.45);
+}
+header.hero .logo img { width: 78%; height: auto; display: block; }
+header.hero h1 {
+  font-size: 44px; margin: 0 0 6px; letter-spacing: -0.02em;
+  display: flex; align-items: baseline; gap: 12px;
+}
+header.hero h1 .dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: linear-gradient(135deg, #22c1e8, #6d00ff);
+}
 header.hero .tag { color: var(--fg-muted); font-size: 19px; margin: 0 0 22px; max-width: 62ch; }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
 .badges img { height: 20px; }
@@ -175,6 +199,8 @@ footer {
   nav.side strong { width: 100%; margin: 10px 0 2px; }
   nav.side a { margin-left: 0; padding: 3px 8px; }
   header.hero { padding: 40px 0 32px; }
+  header.hero .inner { flex-direction: column; align-items: flex-start; gap: 22px; }
+  header.hero .logo { width: 104px; height: 104px; border-radius: 18px; }
   header.hero h1 { font-size: 34px; }
   header.hero .tag { font-size: 17px; }
 }
@@ -183,8 +209,10 @@ footer {
 <body>
 
 <header class="hero">
-  <div class="wrap">
-    <h1>📞 phonex</h1>
+  <div class="wrap inner">
+    <div class="logo"><img src="logo.png" alt="phonex logo: a globe held by a telephone handset" width="488" height="394"></div>
+    <div class="text">
+    <h1>phonex<span class="dot"></span></h1>
     <p class="tag">Phone number parsing, validation and formatting for Go — generated
     directly from Google's libphonenumber, with no dependencies and no
     allocations on the hot path.</p>
@@ -198,6 +226,7 @@ footer {
       <a class="primary" href="#start">Get started</a>
       <a href="https://pkg.go.dev/github.com/bakhod1r/phonex">API reference</a>
       <a href="https://github.com/bakhod1r/phonex">GitHub</a>
+    </div>
     </div>
   </div>
 </header>
