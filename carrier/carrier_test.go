@@ -33,6 +33,52 @@ func TestName(t *testing.T) {
 	}
 }
 
+// TestUzbekistanTable locks the mobile carrier table the README prints, so
+// that a metadata update which reassigns a prefix cannot leave the
+// documentation quietly wrong.
+func TestUzbekistanTable(t *testing.T) {
+	table := map[string]string{
+		"33": "HUMANS",
+		"50": "Ucell", "93": "Ucell", "94": "Ucell",
+		"77": "Uzbektelecom", "95": "Uzbektelecom", "99": "Uzbektelecom",
+		"88": "MobiUZ", "97": "MobiUZ",
+		"90": "Beeline", "91": "Beeline",
+		"98": "Perfectum",
+	}
+	for prefix, want := range table {
+		p, err := phonex.Parse("+998" + prefix + "1234567")
+		if err != nil {
+			t.Errorf("+998%s…: Parse: %v", prefix, err)
+			continue
+		}
+		if !p.IsValid() {
+			t.Errorf("+998%s…: not a valid number", prefix)
+		}
+		if got := Name(p); got != want {
+			t.Errorf("+998%s…: Name() = %q, want %q", prefix, got, want)
+		}
+	}
+	// 59 is not an assigned range, so there is nothing to look up.
+	if p, err := phonex.Parse("+998591234567"); err == nil && p.IsValid() {
+		t.Error("+99859… reports as valid; the README says it is not assigned")
+	}
+}
+
+// TestNoCarrierDataForPortableGiants records that the data set has no entries
+// for United States or Russian mobile ranges. That is upstream's decision, not
+// a gap in generation, and the README says so.
+func TestNoCarrierDataForPortableGiants(t *testing.T) {
+	for _, number := range []string{"+1 212 555 0123", "+1 415 555 0132", "+7 916 123 45 67"} {
+		p, err := phonex.Parse(number)
+		if err != nil {
+			t.Fatalf("Parse(%q): %v", number, err)
+		}
+		if got := Name(p); got != "" {
+			t.Errorf("Name(%q) = %q, want \"\"", number, got)
+		}
+	}
+}
+
 // TestSafeDisplayName covers the guard that matters: in a country with number
 // portability the prefix no longer identifies the network, so no name is
 // returned however confident the data looks.

@@ -11,6 +11,9 @@
 
 A phone number parsing, validation and formatting library for Go.
 
+**[Documentation](https://bakhod1r.github.io/phonex/)** ·
+[API reference](https://pkg.go.dev/github.com/bakhod1r/phonex)
+
 The metadata is generated directly from Google's
 [libphonenumber](https://github.com/google/libphonenumber)
 `PhoneNumberMetadata.xml`, so number ranges, formatting rules, trunk prefixes
@@ -333,6 +336,59 @@ or which network it is on today. A mobile number keeps its area and time zone
 when its owner emigrates, and in a country with number portability the carrier
 name can be years out of date — which is why `SafeDisplayName` returns nothing
 there rather than something misleading.
+
+### A note on carrier lookup
+
+Getting the network from a number is the most frequently asked of the three,
+and the one most often misread, so it is worth being precise about what it
+gives you.
+
+```go
+p, _ := phonex.Parse("+998 93 123 45 67")
+carrier.Name(p)                                  // "Ucell"
+carrier.NameForDigits("998931234567")            // "Ucell", without parsing
+carrier.NameForNumber("93 123 45 67", "UZ")      // "Ucell", in one step
+carrier.SafeDisplayName(p)                       // "Ucell" — see below
+carrier.Count()                                  // 28962 prefixes
+```
+
+The answer comes from a prefix table, which has three consequences worth
+knowing before you show it to anyone:
+
+**It is the network the range was issued to, not the one serving the number
+today.** Where subscribers can keep their number when they switch operator,
+the table cannot know they did. `Name` still returns the original network;
+`SafeDisplayName` returns `""` in those regions instead, and is the one to use
+for anything a user will read. Uzbekistan is not among them, so both agree
+there.
+
+**Coverage is uneven, and the gaps are deliberate.** The data set covers 206
+calling codes, but only the ranges upstream is confident about. There are no
+entries for United States or Russian mobile numbers at all — portability there
+makes a prefix table close to meaningless — so `Name` returns `""` for them.
+An empty result means "not in the data", never "no such carrier".
+
+**Only mobile ranges are covered.** A fixed line returns `""`, because a
+landline belongs to whoever operates the exchange rather than to a network in
+this sense.
+
+For Uzbekistan the whole mobile table is short enough to print:
+
+| Prefix | Carrier |
+| --- | --- |
+| 33 | HUMANS |
+| 50, 93, 94 | Ucell |
+| 77, 95, 99 | Uzbektelecom |
+| 88, 97 | MobiUZ |
+| 90, 91 | Beeline |
+| 98 | Perfectum |
+
+Anything else — `+998 59 …`, say — is not an assigned range, and `IsValid`
+reports that before carrier lookup becomes a question.
+
+A lookup takes about 150 ns and allocates nothing.
+
+### Why these are separate packages
 
 They are separate packages because the data is large and most programs need
 none of it. A hello-world binary, built with Go 1.26 on darwin/arm64:
