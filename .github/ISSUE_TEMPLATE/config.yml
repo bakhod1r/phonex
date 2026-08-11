@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Wrong number data
+    url: https://github.com/google/libphonenumber/issues
+    about: Number ranges, formats and example numbers come from libphonenumber. If it is wrong there, it is wrong here; report it upstream.
+  - name: Security vulnerability
+    url: https://github.com/bakhod1r/phonex/security/advisories/new
+    about: Report privately, not as a public issue.

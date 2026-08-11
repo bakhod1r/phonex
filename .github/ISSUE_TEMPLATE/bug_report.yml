@@ -1,0 +1,52 @@
+name: Bug report
+description: phonex returns the wrong answer, panics, or fails to build.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If the answer matches Google's libphonenumber, phonex is behaving as
+        intended and the disagreement belongs upstream. Please check first at
+        https://libphonenumber.appspot.com/
+
+  - type: input
+    id: number
+    attributes:
+      label: Input
+      description: The exact string passed in, and the default region if one was set.
+      placeholder: phonex.Parse("+998 90 123 45 67")
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened
+      placeholder: |
+        Expected: IsValid() == true
+        Got:      IsValid() == false
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproducer
+      description: A Go snippet or test that shows it. Rendered as Go, no backticks needed.
+      render: go
+
+  - type: input
+    id: version
+    attributes:
+      label: phonex version
+      placeholder: v0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: goversion
+    attributes:
+      label: Go version and platform
+      placeholder: go1.24.1 darwin/arm64
+    validations:
+      required: true

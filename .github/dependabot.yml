@@ -1,0 +1,11 @@
+version: 2
+
+# The library itself has no dependencies, so the only thing to keep current is
+# the set of actions the workflow pins.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "chore"

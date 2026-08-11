@@ -7,6 +7,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/bakhod1r/phonex.svg)](https://pkg.go.dev/github.com/bakhod1r/phonex)
 [![CI](https://github.com/bakhod1r/phonex/actions/workflows/ci.yml/badge.svg)](https://github.com/bakhod1r/phonex/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/bakhod1r/phonex)](https://goreportcard.com/report/github.com/bakhod1r/phonex)
+[![MIT licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
 A phone number parsing, validation and formatting library for Go.
 
@@ -537,6 +538,14 @@ What it has **not** been through: a tagged release or production traffic. The
 API is still v0 and may change.
 
 ---
+
+## Contributing
+
+Bug reports and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md)
+covers the two things particular to this repository: which files are
+generated and must not be edited by hand, and the differential test a change
+has to survive. Vulnerabilities go through [SECURITY.md](SECURITY.md), not the
+issue tracker.
 
 ## Licence
 
