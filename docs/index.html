@@ -524,7 +524,35 @@ for tests and placeholder text:</p>
 
 <pre class="copy"><code>p, _ := phonex.ExampleNumber(<span class="tok-s">"GB"</span>)
 q, _ := phonex.ExampleNumberForType(<span class="tok-s">"GB"</span>, phonex.Mobile)
-r, _ := phonex.Generate(<span class="tok-s">"GB"</span>)  <span class="tok-c">// a random valid-looking number</span></code></pre>
+r, _ := phonex.Generate(<span class="tok-s">"GB"</span>)  <span class="tok-c">// a random valid number</span></code></pre>
+
+<h3>Generating numbers</h3>
+
+<p><code>Generate</code> keeps an example's area and operator digits and
+randomises the subscriber part, so the result is a number
+<code>IsValid</code> accepts. It draws from the global
+<code>math/rand</code>. Where the output has to be reproducible from a seed,
+supply the randomness instead — <code>intn</code> returns a value in
+<code>[0,n)</code>, so any generator fits:</p>
+
+<pre class="copy"><code>rng := rand.New(rand.NewSource(<span class="tok-s">1</span>))
+
+phonex.GenerateWith(<span class="tok-s">"GB"</span>, phonex.Mobile, rng.Intn)   <span class="tok-c">// same seed, same number</span>
+phonex.GenerateWith(<span class="tok-s">"GB"</span>, phonex.AnyType, rng.Intn)  <span class="tok-c">// any range the region has</span>
+
+phonex.GenerateForPrefix(<span class="tok-s">"GB"</span>, <span class="tok-s">"20"</span>, rng.Intn)     <span class="tok-c">// +44 20 xxxx xxxx, London</span>
+phonex.GenerateForPrefix(<span class="tok-s">"UZ"</span>, <span class="tok-s">"93"</span>, rng.Intn)     <span class="tok-c">// +998 93 xxx xx xx, Ucell</span></code></pre>
+
+<p>A prefix may be written either way round. National number lengths vary
+within a country — London's <code>20</code> takes eight further digits where
+most UK codes take seven — and some plans count the trunk digit as part of
+the national number, so Rome is <code>06</code> to phonex and 6 in an atlas.
+Both readings are tried, and the shape that fits is cached.</p>
+
+<div class="note warn">
+<p>Generated numbers are valid, which means they may well belong to a real
+subscriber. Never dial or message them.</p>
+</div>
 
 <h2 id="storage">Storage and encoding <a class="anchor" href="#storage">#</a></h2>
 
@@ -828,7 +856,10 @@ phonex.CountryByDialCode(code) / CountryByPhone(number, opts...) (*Metadata, boo
 phonex.RegionsForDialCode(code) / Countries() / NonGeoEntities() []*Metadata
 phonex.SearchCountries(query) []*Metadata
 phonex.SupportedRegions() []string
-phonex.ExampleNumber(region) / Generate(region) (*Phone, bool)</code></pre>
+phonex.ExampleNumber(region) / Generate(region) (*Phone, bool)
+phonex.GenerateForType(region, t) (*Phone, bool)
+phonex.GenerateWith(region, t, intn func(int) int) (*Phone, bool)
+phonex.GenerateForPrefix(region, prefix, intn func(int) int) (*Phone, bool)</code></pre>
 
 <h3>Optional packages</h3>
 <pre><code>carrier.Name(p) / SafeDisplayName(p) / NameForDigits(digits) string

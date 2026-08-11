@@ -244,6 +244,45 @@ Example numbers come from libphonenumber and are valid by construction:
 p, _ := phonex.ExampleNumberForType("GB", phonex.Mobile)
 ```
 
+### Generating numbers
+
+For test fixtures and demos, `Generate` builds a random number that `IsValid`
+accepts, by keeping an example's area and operator digits and randomising the
+subscriber part:
+
+```go
+phonex.Generate("GB")                        // random, prefers mobile
+phonex.GenerateForType("GB", phonex.Mobile)  // a particular range
+```
+
+Both draw from the global `math/rand`. Where the output has to be reproducible
+from a seed, supply the randomness instead — `intn` returns a value in
+`[0,n)`, so any generator fits, and phonex is not tied to one:
+
+```go
+r := rand.New(rand.NewSource(1))
+phonex.GenerateWith("GB", phonex.Mobile, r.Intn)  // same seed, same number
+phonex.GenerateWith("GB", phonex.AnyType, r.Intn) // any range the region has
+```
+
+To generate around a code you already know — an area or operator prefix —
+give it to `GenerateForPrefix`:
+
+```go
+phonex.GenerateForPrefix("GB", "20", r.Intn)   // +44 20 xxxx xxxx, London
+phonex.GenerateForPrefix("UZ", "93", r.Intn)   // +998 93 xxx xx xx, Ucell
+```
+
+The prefix may be written either way round. National number lengths vary
+within a country — London's `20` takes eight further digits where most UK
+codes take seven — and some plans count the trunk digit as part of the
+national number, so Rome is `06` to phonex and `6` in an atlas. Both readings
+are tried, and the shape that fits is cached. It reports false when no shape
+the plan defines accepts the prefix.
+
+> Generated numbers are valid, which means they may well belong to a real
+> subscriber. Never dial or message them.
+
 ---
 
 ## 9. Storage and encoding

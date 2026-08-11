@@ -9,6 +9,27 @@ change will be listed here.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-11
+
+### Added
+
+- `GenerateWith(region, type, intn)` — number generation with the randomness
+  supplied by the caller, so that output can be reproduced from a seed.
+  `Generate` and `GenerateForType` now call it with the global `math/rand`.
+- `AnyType`, asking for whatever range a region defines rather than a
+  particular one.
+- `GenerateForPrefix(region, prefix, intn)` — a valid number whose national
+  number starts with a given area or operator code. The prefix may be written
+  with or without the trunk digit; the shape that fits it is cached.
+
+### Fixed
+
+- `Generate` and `GenerateForType` returned the same example number on every
+  call for countries that do not separate their fixed-line and mobile ranges
+  (the United States and Canada among them). Such a region reports every
+  number as `FIXED_LINE_OR_MOBILE`, which the type check rejected, so no
+  randomised candidate was ever accepted.
+
 ## [0.1.0] - 2026-08-11
 
 First release.
