@@ -1,0 +1,11 @@
+# Test and profiling output
+coverage.out
+*.out
+*.test
+*.prof
+
+# Generator output kept when formatting fails, for debugging only
+*.broken
+
+# Local build artefacts
+/bin/

@@ -1,0 +1,22 @@
+phonex
+Copyright 2026 The phonex Authors
+
+This product includes software developed at Google Inc.
+
+The phone number metadata under internal/metadata/, and the tables generated
+from it under countries/, shortnumber/, timezone/, carrier/ and geocoding/,
+are derived from Google's libphonenumber:
+
+    https://github.com/google/libphonenumber
+
+libphonenumber is licensed under the Apache License, Version 2.0. The data
+vendored here is taken verbatim from its v9.0.32 release:
+
+    resources/PhoneNumberMetadata.xml
+    resources/ShortNumberMetadata.xml
+    resources/timezones/map_data.txt
+    resources/carrier/en/
+    resources/geocoding/en/
+
+No modification is made to the data itself; the generator only transcodes it
+into Go source.

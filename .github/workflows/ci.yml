@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest supported release and the current one. The metadata
+        # tables are large, so this also catches compiler regressions on
+        # very big generated files.
+        go: ['1.21', 'stable']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Build
+        run: go build ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test ./...
+      - name: Test with the race detector
+        run: go test -race ./...
+
+  gofmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "these files are not gofmt'd:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+  generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Check the metadata table matches the vendored XML
+        run: |
+          go generate ./...
+          if ! git diff --exit-code -- countries/generated.go shortnumber/generated.go \
+                                        timezone/generated.go carrier/generated.go \
+                                        geocoding/generated.go; then
+            echo "a generated metadata table is stale; run 'make generate'"
+            exit 1
+          fi
+
+  differential:
+    # Compares against Google's libphonenumber through nyaruka/phonenumbers.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Differential test against libphonenumber
+        run: go test -v ./...
+        working-directory: difftest
+
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Fuzz the parser
+        run: go test -run '^$' -fuzz FuzzParse -fuzztime 120s .
