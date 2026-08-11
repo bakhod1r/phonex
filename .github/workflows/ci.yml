@@ -16,7 +16,7 @@ jobs:
         # The oldest supported release and the current one. The metadata
         # tables are large, so this also catches compiler regressions on
         # very big generated files.
-        go: ['1.21', 'stable']
+        go: ['1.26', 'stable']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

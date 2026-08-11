@@ -11,6 +11,10 @@ change will be listed here.
 
 ## [0.2.0] - 2026-08-11
 
+### Changed
+
+- The minimum Go version is now 1.26, raised from 1.21.
+
 ### Added
 
 - `GenerateWith(region, type, intn)` — number generation with the randomness

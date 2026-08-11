@@ -40,7 +40,7 @@ p.IsValid()       // true
 go get github.com/bakhod1r/phonex
 ```
 
-Requires Go 1.21 or newer.
+Requires Go 1.26 or newer.
 
 ---
 
